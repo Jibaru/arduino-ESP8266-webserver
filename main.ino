@@ -10,8 +10,8 @@
 const char* htmlfile = "/index.html";
 
 //WiFi Connection configuration
-const char *ssid = "circuits4you.com";
-const char *password = "password";
+const char *ssid = "MOVISTAR_F5A0";
+const char *password = "X2PUjHxU2UmjcY9XUr3H";
 
 ESP8266WebServer server(80);
  
