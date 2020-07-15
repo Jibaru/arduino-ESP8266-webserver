@@ -47,8 +47,13 @@ void handleWebRequests(){
  
 void setup() {
   delay(1000);
-  Serial.begin(115200);
+  Serial.begin(9600);
   Serial.println();
+
+  //Configuración  del GPIO2
+  pinMode(2, OUTPUT);
+  digitalWrite(2,LOW);
+  Serial.println("TEst");
  
   //Initialize File System
   SPIFFS.begin();
