@@ -1,48 +1,44 @@
-/*
- * ESP8266 SPIFFS HTML Web Page with JPEG, PNG Image 
- * https://circuits4you.com
- */
 
 #include <ESP8266WiFi.h>
 #include <ESP8266WebServer.h>
-#include <FS.h>   //Include File System Headers
 
-const char* htmlfile = "/index.html";
+#define PIN2 2
+#define PIN13 13
 
-//WiFi Connection configuration
+//Configuracion de Conexion WIFI
 const char *ssid = "MOVISTAR_F5A0";
 const char *password = "X2PUjHxU2UmjcY9XUr3H";
 
 ESP8266WebServer server(80);
- 
-/*void handleADC(){
-  int a = analogRead(A0);
-  a = map(a,0,1023,0,100);
-  String adc = String(a);
-  Serial.println(adc);
-  server.send(200, "text/plane",adc);
-}*/
- 
-void handleRoot(){
-  server.sendHeader("Location", "/server/index.html",true);   //Redirect to our html web page
-  server.send(302, "text/plane","");
+
+void rutaInicio(){
+  server.send(202, "text/plane","");
 }
- 
-void handleWebRequests(){
-  if(loadFromSpiffs(server.uri())) return;
-  String message = "File Not Detected\n\n";
-  message += "URI: ";
-  message += server.uri();
-  message += "\nMethod: ";
-  message += (server.method() == HTTP_GET)?"GET":"POST";
-  message += "\nArguments: ";
-  message += server.args();
-  message += "\n";
-  for (uint8_t i=0; i<server.args(); i++){
-    message += " NAME:"+server.argName(i) + "\n VALUE:" + server.arg(i) + "\n";
+
+void noEncontrado(){
+  server.send(404, "text/plain", "Ruta no válida");
+}
+
+void enviarDatos(){
+  
+  if(server.argName(0) != "parametro"){
+    server.send(400, "text/plane", "Parámetro incorrecto");
   }
-  server.send(404, "text/plain", message);
-  Serial.println(message);
+  
+  if(server.arg(0) == "1"){
+    digitalWrite(PIN2,HIGH); 
+    server.send(202, "text/plane", "led encendido");
+  }
+
+  if(server.arg(0) == "0"){
+    digitalWrite(PIN2,LOW); 
+    server.send(202, "text/plane", "led apagado");
+  }
+  
+}
+
+void obtenerDatos(){
+  server.send(202, "text/plane","Dato enviado :v");
 }
  
 void setup() {
@@ -53,62 +49,32 @@ void setup() {
   //Configuración  del GPIO2
   pinMode(2, OUTPUT);
   digitalWrite(2,LOW);
-  Serial.println("TEst");
- 
-  //Initialize File System
-  SPIFFS.begin();
-  Serial.println("File System Initialized");
- 
-  
-  //Connect to wifi Network
+
+  //Conexion a WIFI
   WiFi.begin(ssid, password);     //Connect to your WiFi router
   Serial.println("");
- 
-  // Wait for connection
+
+  // Tiempo de espera
   while (WiFi.status() != WL_CONNECTED) {
     delay(500);
     Serial.print(".");
   }
- 
-  //If connection successful show IP address in serial monitor
+
+  // Datos de conexión 
   Serial.println("");
-  Serial.print("Connected to ");
+  Serial.print("Conectado a ");
   Serial.println(ssid);
-  Serial.print("IP address: ");
-  Serial.println(WiFi.localIP());  //IP address assigned to your ESP
- 
-  //Initialize Webserver
-  server.on("/",handleRoot);
-  //server.on("/getADC",handleADC); //Reads ADC function is called from out index.html
-  server.onNotFound(handleWebRequests); //Set setver all paths are not found so we can handle as per URI
-  server.begin();  
+  Serial.print("IP: ");
+  Serial.println(WiFi.localIP());
+
+  // Servicios
+  server.on("/", rutaInicio);
+  server.on("/enviar-datos", enviarDatos);
+  server.on("/obtener-datos", obtenerDatos);
+  server.onNotFound(noEncontrado);
+  server.begin();
 }
- 
+
 void loop() {
- server.handleClient();
-}
- 
-bool loadFromSpiffs(String path){
-  String dataType = "text/plain";
-  if(path.endsWith("/")) path += "index.htm";
- 
-  if(path.endsWith(".src")) path = path.substring(0, path.lastIndexOf("."));
-  else if(path.endsWith(".html")) dataType = "text/html";
-  else if(path.endsWith(".htm")) dataType = "text/html";
-  else if(path.endsWith(".css")) dataType = "text/css";
-  else if(path.endsWith(".js")) dataType = "application/javascript";
-  else if(path.endsWith(".png")) dataType = "image/png";
-  else if(path.endsWith(".gif")) dataType = "image/gif";
-  else if(path.endsWith(".jpg")) dataType = "image/jpeg";
-  else if(path.endsWith(".ico")) dataType = "image/x-icon";
-  else if(path.endsWith(".xml")) dataType = "text/xml";
-  else if(path.endsWith(".pdf")) dataType = "application/pdf";
-  else if(path.endsWith(".zip")) dataType = "application/zip";
-  File dataFile = SPIFFS.open(path.c_str(), "r");
-  if (server.hasArg("download")) dataType = "application/octet-stream";
-  if (server.streamFile(dataFile, dataType) != dataFile.size()) {
-  }
- 
-  dataFile.close();
-  return true;
+  server.handleClient();
 }
