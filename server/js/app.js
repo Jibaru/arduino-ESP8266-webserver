@@ -1,6 +1,7 @@
 // URLS
-var urlActualizar = '';
-var urlEstblecerVol = '';
+var host = 'http://192.168.1.13';
+var urlActualizar = 'obtener-musica';
+var urlEstblecerVol = 'cambiar-maximo';
 
 // Objectos DOM
 var btnActualizar = document.getElementById('btn-actualizar');
@@ -17,12 +18,12 @@ btnActualizar.addEventListener('click', function(e) {
 
     const xhr = new XMLHttpRequest();
 
-    xhr.open('GET', urlActualizar, true);
+    xhr.open('GET', host + '/' + urlActualizar, true);
 
     xhr.onload = function(){
         if(this.status === 200){
-            const resp = JSON.parse(this.responseText);
-
+            var resp = JSON.parse(this.responseText);
+            document.getElementById('vol-actual').textContent = resp;
             console.log(resp);
         }
     }
@@ -33,16 +34,17 @@ btnActualizar.addEventListener('click', function(e) {
 formVolumen.addEventListener('submit', function(e) {
     e.preventDefault();
 
-    var params = 'vol=245';
+    var valor = rangVolumen.value;
+
+    var params = 'vol=' + valor;
 
     var xhr = new XMLHttpRequest();
 
-    xhr.open('POST', urlEstblecerVol, true);
+    xhr.open('POST', host + '/' + urlEstblecerVol, true);
     xhr.setRequestHeader('Content-type', 'application/x-www-form-urlencoded');
     xhr.onload = function(){
         if(this.status === 200){
             const resp = JSON.parse(this.responseText);
-
             console.log(resp);
         }
     }

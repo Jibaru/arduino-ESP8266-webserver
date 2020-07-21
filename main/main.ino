@@ -47,7 +47,8 @@ void cambiarMaximo(){
 }
 
 void obtenerMusica() {
-  server.send(200, "text/plane",(String) vol.musica());
+  String mu = (String) vol.musica();
+  server.send(200, "text/plane", mu);
 }
  
 void setup() {
@@ -65,7 +66,7 @@ void setup() {
   vol.setMax(30);
 
   //Conexion a WIFI
-  WiFi.begin(ssid, password);     //Connect to your WiFi router
+  WiFi.begin(ssid, password);
   Serial.println("");
 
   // Tiempo de espera
@@ -92,7 +93,6 @@ void setup() {
 }
 
 void loop() {
-  
   server.handleClient();
   vol.ejecutar();
   delay(10);
