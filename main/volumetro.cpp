@@ -58,16 +58,16 @@ void Volumetro::setUsaPotenciometro(bool usa)
 	_usa_potenciometro = usa;
 }
 
-int Volumetro::max()
+int Volumetro::maximo()
 {
 	return (_usa_potenciometro) 
 		? analogRead(_pin_max)
-		: max;
+		: _max;
 }
 
 int Volumetro::seg()
 {
-	return max() / 8;
+	return maximo() / 8;
 }
 
 int Volumetro::musica()
@@ -77,55 +77,55 @@ int Volumetro::musica()
 
 void Volumetro::ejecutar()
 {
-	int musica = musica();
-	int seg = seg();
+	int musicaVar = musica();
+	int segVar = seg();
 	///////////////LED 1/////////////////////////////   
-    if(musica > 0)
+    if(musicaVar > 0)
     	digitalWrite(_pin_1, HIGH);
     else
     	digitalWrite(_pin_1, LOW);
     
     ///////////////LED 2/////////////////////////////
     
-    if(musica > seg)
-		digitalWrite(_pin_2, HIGH);
+    if(musicaVar > segVar)
+		  digitalWrite(_pin_2, HIGH);
     else 
 		digitalWrite(_pin_2, LOW);
     
     ///////////////LED 3/////////////////////////////
     
-    if(musica > (seg * 2))
+    if(musicaVar > (segVar * 2))
     	digitalWrite(_pin_3, HIGH);
     else
-		digitalWrite(_pin_3, LOW);
+		  digitalWrite(_pin_3, LOW);
     
     ///////////////LED 4/////////////////////////////
-    if(musica > (seg * 3))  
-		digitalWrite(_pin_4, HIGH);
-    else {
+    if(musicaVar > (segVar * 3))  
+		  digitalWrite(_pin_4, HIGH);
+    else
 		digitalWrite(_pin_4, LOW);
     
     ///////////////LED 5/////////////////////////////    
-    if(musica > (seg * 4))  
-		digitalWrite(_pin_5, HIGH);
+    if(musicaVar > (segVar * 4))  
+		  digitalWrite(_pin_5, HIGH);
     else
     	digitalWrite(_pin_5, LOW);
     
     ///////////////LED 6/////////////////////////////    
-    if(musica > (seg * 5))
+    if(musicaVar > (segVar * 5))
     	digitalWrite(_pin_6, HIGH);
     else
     	digitalWrite(_pin_6, LOW);
     
     ///////////////LED 7/////////////////////////////
-    if(musica > (seg * 6))
+    if(musicaVar > (segVar * 6))
     	digitalWrite(_pin_7, HIGH);
     else
     	digitalWrite(_pin_7, LOW);
     
     ///////////////LED 8/////////////////////////////
-    if(musica > (seg * 7))
+    if(musicaVar > (segVar * 7))
     	digitalWrite(_pin_8, HIGH);
-    else {
+    else
     	digitalWrite(_pin_8, LOW);
 }

@@ -1,5 +1,3 @@
-
-#include <Arduino.h>
 #include <ESP8266WiFi.h>
 #include <ESP8266WebServer.h>
 #include "Volumetro.h"
@@ -9,7 +7,7 @@ const char *ssid = "MOVISTAR_F5A0";
 const char *password = "X2PUjHxU2UmjcY9XUr3H";
 
 ESP8266WebServer server(80);
-Volumetro vol(4, 5, 6, 7, 8, 9, 10, 11, 0, 1);
+Volumetro vol(16, 5, 4, 0, 2, 14, 12, 13, 1, 0);
 
 void rutaInicio(){
   server.send(202, "text/plane","");
@@ -43,9 +41,13 @@ void obtenerDatos(){
 
 void cambiarMaximo(){
 	if(server.arg(0)){
-	    vol.setMax(server.arg(0).toInt()) 
+	    vol.setMax(server.arg(0).toInt()); 
 	    server.send(202, "text/plane", "Se cambio");
 	}
+}
+
+void obtenerMusica() {
+  server.send(200, "text/plane",(String) vol.musica());
 }
  
 void setup() {
@@ -59,7 +61,8 @@ void setup() {
   
   // Inicializar volumetro
   vol.inicializar();
-  vol.usaPotenciometro(false);
+  vol.setUsaPotenciometro(false);
+  vol.setMax(30);
 
   //Conexion a WIFI
   WiFi.begin(ssid, password);     //Connect to your WiFi router
@@ -83,11 +86,13 @@ void setup() {
   server.on("/enviar-datos", enviarDatos);
   server.on("/obtener-datos", obtenerDatos);
   server.on("/cambiar-maximo", cambiarMaximo);
+  server.on("/obtener-musica", obtenerMusica);
   server.onNotFound(noEncontrado);
   server.begin();
 }
 
 void loop() {
+  
   server.handleClient();
   vol.ejecutar();
   delay(10);
