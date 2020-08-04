@@ -29,7 +29,7 @@ setInterval(function() {
 
     xhr.send();
 
-}, 5000);
+}, 1500);
 
 btnActualizar.addEventListener('click', function(e) {
 
