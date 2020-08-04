@@ -10,44 +10,52 @@ ESP8266WebServer server(80);
 Volumetro vol(16, 5, 4, 0, 2, 14, 12, 13, 1, 0);
 
 void rutaInicio(){
+  server.sendHeader("Access-Control-Allow-Origin", "*");
   server.send(202, "text/plane","");
 }
 
 void noEncontrado(){
+  server.sendHeader("Access-Control-Allow-Origin", "*");
   server.send(404, "text/plain", "Ruta no válida");
 }
 
 void enviarDatos(){
   
   if(server.argName(0) != "parametro"){
+    server.sendHeader("Access-Control-Allow-Origin", "*");
     server.send(400, "text/plane", "Parámetro incorrecto");
   }
   
   if(server.arg(0) == "1"){
     digitalWrite(1,HIGH); 
+    server.sendHeader("Access-Control-Allow-Origin", "*");
     server.send(202, "text/plane", "led encendido");
   }
 
   if(server.arg(0) == "0"){
     digitalWrite(1,LOW); 
+    server.sendHeader("Access-Control-Allow-Origin", "*");
     server.send(202, "text/plane", "led apagado");
   }
   
 }
 
 void obtenerDatos(){
+  server.sendHeader("Access-Control-Allow-Origin", "*");
   server.send(202, "text/plane","Dato enviado :v");
 }
 
 void cambiarMaximo(){
 	if(server.arg(0)){
 	    vol.setMax(server.arg(0).toInt()); 
+      server.sendHeader("Access-Control-Allow-Origin", "*");
 	    server.send(202, "text/plane", "Se cambio");
 	}
 }
 
 void obtenerMusica() {
   String mu = (String) vol.musica();
+  server.sendHeader("Access-Control-Allow-Origin", "*");
   server.send(200, "text/plane", mu);
 }
  
