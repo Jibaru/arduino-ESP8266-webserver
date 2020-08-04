@@ -1,5 +1,5 @@
 // URLS
-var host = 'http://192.168.1.13';
+var host = 'http://181.64.7.63:9090';
 var urlActualizar = 'obtener-musica';
 var urlEstblecerVol = 'cambiar-maximo';
 
@@ -13,6 +13,23 @@ var formVolumen = document.getElementById('form-volumen');
 rangVolumen.addEventListener('change', function(e) {
     badgeVolumen.textContent = this.value;   
 })
+
+setInterval(function() {
+    const xhr = new XMLHttpRequest();
+
+    xhr.open('GET', host + '/' + urlActualizar, true);
+    xhr.setRequestHeader('Content-Type', 'application/x-www-form-urlencoded');
+    xhr.onload = function(){
+        if(this.status === 200){
+            var resp = JSON.parse(this.responseText);
+            document.getElementById('vol-actual').textContent = resp;
+            console.log(resp);
+        }
+    }
+
+    xhr.send();
+
+}, 5000);
 
 btnActualizar.addEventListener('click', function(e) {
 
