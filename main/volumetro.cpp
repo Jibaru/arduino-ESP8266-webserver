@@ -79,6 +79,7 @@ void Volumetro::ejecutar()
 {
 	int musicaVar = musica();
 	int segVar = seg();
+	Serial.println(musicaVar);
 	///////////////LED 1/////////////////////////////   
     if(musicaVar > 0)
     	digitalWrite(_pin_1, HIGH);
