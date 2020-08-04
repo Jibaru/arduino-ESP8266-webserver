@@ -9,14 +9,27 @@ var badgeVolumen = document.getElementById('badge-volumen');
 var rangVolumen = document.getElementById('input-volumen');
 var formVolumen = document.getElementById('form-volumen');
 var btnVolumen = document.getElementById('btn-volumen');
+var vumetro = document.getElementById('vumetro');
 
 // Variables globales
 var contador = 1;
+var max = 30;
 
 // Listeners
 rangVolumen.addEventListener('change', function(e) {
     badgeVolumen.textContent = this.value;   
 })
+
+function actualizarVumetroVista(musica) {
+    var segVar = max / 8;
+
+    for(var i = 0; i < 8; i++) {
+        if(musica > (i * segVar))
+            vumetro.children[i].classList.add('grey', 'darken-1');
+        else
+            vumetro.children[i].classList.remove('grey', 'darken-1');
+    }
+}
 
 setInterval(function() {
     const xhr = new XMLHttpRequest();
@@ -37,29 +50,14 @@ setInterval(function() {
             chart.data.labels.push(contador);
             contador++;
             chart.update();
+
+            actualizarVumetroVista(musc);
         }
     }
 
     xhr.send();
 
 }, 1500);
-
-btnActualizar.addEventListener('click', function(e) {
-
-    const xhr = new XMLHttpRequest();
-
-    xhr.open('GET', host + '/' + urlActualizar, true);
-
-    xhr.onload = function(){
-        if(this.status === 200){
-            var resp = JSON.parse(this.responseText);
-            document.getElementById('vol-actual').textContent = resp;
-            console.log(resp);
-        }
-    }
-
-    xhr.send();
-});
 
 btnVolumen.addEventListener('click', function(e) {
     e.preventDefault();
@@ -77,6 +75,7 @@ btnVolumen.addEventListener('click', function(e) {
         if(this.status === 200){
             const resp = JSON.parse(this.responseText);
             console.log(resp);
+            max = valor;
         }
     }
     xhr.send(params);
