@@ -8,6 +8,10 @@ var btnActualizar = document.getElementById('btn-actualizar');
 var badgeVolumen = document.getElementById('badge-volumen');
 var rangVolumen = document.getElementById('input-volumen');
 var formVolumen = document.getElementById('form-volumen');
+var btnVolumen = document.getElementById('btn-volumen');
+
+// Variables globales
+var contador = 1;
 
 // Listeners
 rangVolumen.addEventListener('change', function(e) {
@@ -23,7 +27,16 @@ setInterval(function() {
         if(this.status === 200){
             var resp = JSON.parse(this.responseText);
             document.getElementById('vol-actual').textContent = resp;
-            console.log(resp);
+
+            var musc = Number(resp);
+
+            /*for(var i = 0; i< 8; i++) {
+                chart.data.datasets[0].data[0] = musc * (i + 1);
+            }*/
+            chart.data.datasets[0].data.push(musc);
+            chart.data.labels.push(contador);
+            contador++;
+            chart.update();
         }
     }
 
@@ -48,8 +61,9 @@ btnActualizar.addEventListener('click', function(e) {
     xhr.send();
 });
 
-formVolumen.addEventListener('submit', function(e) {
+btnVolumen.addEventListener('click', function(e) {
     e.preventDefault();
+    console.log("submit")
 
     var valor = rangVolumen.value;
 

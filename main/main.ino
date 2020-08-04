@@ -58,6 +58,12 @@ void obtenerMusica() {
   server.sendHeader("Access-Control-Allow-Origin", "*");
   server.send(200, "text/plane", mu);
 }
+
+void obtenerMaximo() {
+  String maxim = (String) vol.maximo();
+  server.sendHeader("Access-Control-Allow-Origin", "*");
+  server.send(200, "text/plane", maxim);
+}
  
 void setup() {
   delay(1000);
@@ -96,6 +102,7 @@ void setup() {
   server.on("/obtener-datos", obtenerDatos);
   server.on("/cambiar-maximo", cambiarMaximo);
   server.on("/obtener-musica", obtenerMusica);
+  server.on("/obtener-maximo", obtenerMaximo);
   server.onNotFound(noEncontrado);
   server.begin();
 }
