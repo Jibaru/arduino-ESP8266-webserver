@@ -1,5 +1,5 @@
 // URLS
-var host = 'https://181.64.7.63:9090';
+var host = 'http://181.64.7.63:9090';
 var urlActualizar = 'obtener-musica';
 var urlEstblecerVol = 'cambiar-maximo';
 
