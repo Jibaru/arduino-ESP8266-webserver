@@ -10,6 +10,8 @@ var rangVolumen = document.getElementById('input-volumen');
 var formVolumen = document.getElementById('form-volumen');
 var btnVolumen = document.getElementById('btn-volumen');
 var vumetro = document.getElementById('vumetro');
+var volEntradaSpan = document.getElementById('vol-entrada');
+var volSalidaSpan = document.getElementById('vol-salida');
 
 // Variables globales
 var contador = 1;
@@ -31,6 +33,11 @@ function actualizarVumetroVista(musica) {
     }
 }
 
+function obtenerVolReducido(musica) {
+    var porcRed = max * 0.3;
+    return musica * porcRed;
+}
+
 setInterval(function() {
     const xhr = new XMLHttpRequest();
 
@@ -39,19 +46,22 @@ setInterval(function() {
     xhr.onload = function(){
         if(this.status === 200){
             var resp = JSON.parse(this.responseText);
-            document.getElementById('vol-actual').textContent = resp;
+            var volEntrada = Number(resp);
+            var volSalida = obtenerVolReducido(volEntrada);
 
-            var musc = Number(resp);
+            volEntradaSpan.textContent = volEntrada;
+            volSalidaSpan.textContent = volSalida;
 
-            /*for(var i = 0; i< 8; i++) {
-                chart.data.datasets[0].data[0] = musc * (i + 1);
-            }*/
-            chart.data.datasets[0].data.push(musc);
-            chart.data.labels.push(contador);
+            chartEntrada.data.datasets[0].data.push(volEntrada);
+            chartEntrada.data.labels.push(contador);
+            chartEntrada.update();
+
+            chartSalida.data.datasets[0].data.push(volSalida);
+            chartSalida.data.labels.push(contador);
+            chartSalida.update();
+            
             contador++;
-            chart.update();
-
-            actualizarVumetroVista(musc);
+            actualizarVumetroVista(volEntrada);
         }
     }
 

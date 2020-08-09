@@ -28,7 +28,8 @@
 			<div class="card">
 				<div class="card-content">
 					<span class="card-title">Información actual</span>
-					<span>Volumen:</span> <span id="vol-actual"></span>
+					<span>Volumen Entrada:</span> <span id="vol-entrada"></span>
+					<span>Volumen Salida:</span> <span id="vol-salida"></span>
 				</div>
 				
 			</div>
@@ -45,7 +46,7 @@
 			<div class="card">
 				<div class="card-content">
 					<span class="card-title">
-						Establecer delimitador máximo
+						Establecer resistencia al volumen (a mayor número, menor volumen)
 					</span>
 					
 					<span id="badge-volumen" class="new badge" data-badge-caption="max">
@@ -81,11 +82,16 @@
 			</div>
 			<div class="card">
 				<div class="card-content">
-					<span class="card-title">Evolución</span>
-					<canvas id="myChart" width="400" height="150"></canvas>
+					<span class="card-title">Evolución volumen entrada</span>
+					<canvas id="chart-entrada" width="400" height="150"></canvas>
 				</div>
 			</div>
-			
+			<div class="card">
+				<div class="card-content">
+					<span class="card-title">Evolución volumen salida</span>
+					<canvas id="chart-salida" width="400" height="150"></canvas>
+				</div>
+			</div>
 		</div>
 	</div>
 	
