@@ -34,8 +34,8 @@ function actualizarVumetroVista(musica) {
 }
 
 function obtenerVolReducido(musica) {
-    var porcRed = max * 0.3;
-    return musica * 10 / porcRed;
+    var porcRed = max / 1000;
+    return musica * porcRed;
 }
 
 setInterval(function() {
